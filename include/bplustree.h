@@ -1,31 +1,31 @@
-#pragma onve 
+#pragma once 
 #include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
 
-//ÀûÓÃÄ£°åÀàÊµÏÖint float stringÈıÖÖÊı¾İÀàĞÍ 
-//¶¨Òåbplustree½ÚµãµÄÊôĞÔÒÔ¼°²Ù×÷ 
+//åˆ©ç”¨æ¨¡æ¿ç±»å®ç°int float stringä¸‰ç§æ•°æ®ç±»å‹ 
+//å®šä¹‰bplustreeèŠ‚ç‚¹çš„å±æ€§ä»¥åŠæ“ä½œ 
 template <typename T>
 class BPTnode{
 	public:
-		BPTnode(int degree_, bool isleaf_ = false); //¹¹Ôìº¯Êı 
-		~BPTnode(); //Îö¹¹º¯Êı
-		bool isroot(); //ÅĞ¶ÏÊÇ·ñÎª¸ù½Úµã 
-		bool searchkey(T key, unsigned int &index); //ÅĞ¶Ï½ÚµãÄÚÊÇ·ñ´æÔÚĞèÒªµÄkey
-		int addkey(T &key); // Ìí¼ÓkeyÖµ²¢·µ»Øindex
-		bool deletekey(unsigned int index); // É¾³ıindex¶ÔÓ¦µÄkey 
-		BPTnode* split(T &key); // BPT½ÚµãµÄ·ÖÁÑ 
-		BPTnode* NextLeaf(); //·µ»ØÏÂÒ»¸öÒ¶½Úµã 
+		BPTnode(int degree_, bool isleaf_ = false); //æ„é€ å‡½æ•° 
+		~BPTnode(); //ææ„å‡½æ•°
+		bool isroot(); //åˆ¤æ–­æ˜¯å¦ä¸ºæ ¹èŠ‚ç‚¹ 
+		bool searchkey(T key, unsigned int &index); //åˆ¤æ–­èŠ‚ç‚¹å†…æ˜¯å¦å­˜åœ¨éœ€è¦çš„key
+		int addkey(T &key); // æ·»åŠ keyå€¼å¹¶è¿”å›index
+		bool deletekey(unsigned int index); // åˆ é™¤indexå¯¹åº”çš„key 
+		BPTnode* split(T &key); // BPTèŠ‚ç‚¹çš„åˆ†è£‚ 
+		BPTnode* NextLeaf(); //è¿”å›ä¸‹ä¸€ä¸ªå¶èŠ‚ç‚¹ 
 	
 	public:
-		int degree; // bptµÄ¶È 
-		bool isleaf; //ÅĞ¶ÏÊÇ·ñÎªÒ¶½Úµã
-		unsigned int keynum; //½ÚµãÄÚkeyµÄÊıÁ¿
-		BPTnode* nextleaf; //Ö¸ÏòÏÂÒ»¸öÒ¶½Úµã 
-		BPTnode* parent; //Ö¸Ïò¸¸½Úµã
-		vector <T> keys; //´æ·Åkey
-		vector <BPTnode*> childs; //´æ·ÅÖ¸Ïò×Ó½ÚµãµÄÖ¸Õë	     
+		int degree; // bptçš„åº¦ 
+		bool isleaf; //åˆ¤æ–­æ˜¯å¦ä¸ºå¶èŠ‚ç‚¹
+		unsigned int keynum; //èŠ‚ç‚¹å†…keyçš„æ•°é‡
+		BPTnode* nextleaf; //æŒ‡å‘ä¸‹ä¸€ä¸ªå¶èŠ‚ç‚¹ 
+		BPTnode* parent; //æŒ‡å‘çˆ¶èŠ‚ç‚¹
+		vector <T> keys; //å­˜æ”¾key
+		vector <BPTnode*> childs; //å­˜æ”¾æŒ‡å‘å­èŠ‚ç‚¹çš„æŒ‡é’ˆ	     
 };
 
 template <class T>
@@ -55,22 +55,22 @@ bool BPTnode<T>::isroot(){
 
 template <class T>
 bool BPTnode<T>::searchkey(T key, unsigned int &index){
-	//½ÚµãÄÚkeyÊıÁ¿Îª0 
+	//èŠ‚ç‚¹å†…keyæ•°é‡ä¸º0 
 	if (keynum == 0){
 		index = 0;
 		return false;
 	}
-	//keyĞ¡ÓÚ¸Ã½ÚµãÄÚ×îĞ¡keyÖµ 
+	//keyå°äºè¯¥èŠ‚ç‚¹å†…æœ€å°keyå€¼ 
 	else if (key < keys[0]){
 		index = 0;
 		return false; 
 	}
-	//key´óÓÚ¸Ã½ÚµãÄÚ×î´ókeyÖµ 
+	//keyå¤§äºè¯¥èŠ‚ç‚¹å†…æœ€å¤§keyå€¼ 
 	else if (key > keys[keynum - 1]){
 		index = keynum;
 		return false;
 	}
-	//¶ş·Ö·¨ËÑË÷ 
+	//äºŒåˆ†æ³•æœç´¢ 
 	else {
 		int left = 0;
 		int right = keynum -1;
@@ -95,18 +95,18 @@ bool BPTnode<T>::searchkey(T key, unsigned int &index){
 template <class T>
 int BPTnode<T>::addkey(T &key){
 	unsigned int index = 0;
-	// Èô½ÚµãÄÚÒÑ´æÔÚ¸ÃkeyÖµ 
-	if (searchkey(key, index)){ //¶ÔindexµÄÒıÓÃÒÑ¾­¸Ä±äÁËindexµÄÖµ 
+	// è‹¥èŠ‚ç‚¹å†…å·²å­˜åœ¨è¯¥keyå€¼ 
+	if (searchkey(key, index)){ //å¯¹indexçš„å¼•ç”¨å·²ç»æ”¹å˜äº†indexçš„å€¼ 
 		return -1;
 	}
-	//¿ÉÌí¼Ó 
+	//å¯æ·»åŠ  
 	else {
 		if (keynum == 0){
 			keys[0] = key;
 			keynum ++;
 			return index
 		}
-		//¸Ä±äkeyÎ»ÖÃÒÔ¼°Ö¸Õë 
+		//æ”¹å˜keyä½ç½®ä»¥åŠæŒ‡é’ˆ 
 		else{
 			for (int i = keynum; i > index; i--){
 				keys[i] = keys[i-1];
@@ -127,18 +127,18 @@ int BPTnode<T>::addkey(T &key){
 
 template <class T>
 bool BPTnode<T>::deletekey(unsigned int index){
-	// index ³¬¹ı·¶Î§ 
+	// index è¶…è¿‡èŒƒå›´ 
 	if (index > keynum){
 		return false;
 	}
 	else {
-		// Ò¶½Úµã 
+		// å¶èŠ‚ç‚¹ 
 		if (isleaf){
-			// ÒÆ¶¯key 
+			// ç§»åŠ¨key 
 			for(int i = index; i < keynum - 1; i++){
 				keys[i] = keys[i+1];
 			}
-			keys.pop_back(); // É¾³ıÈİÆ÷×îºóÒ»¸öÔªËØ 
+			keys.pop_back(); // åˆ é™¤å®¹å™¨æœ€åä¸€ä¸ªå…ƒç´  
 		}
 		else {
 			for(int i = index; i < keynum - 1; i++){
@@ -165,7 +165,7 @@ BPTnode<T>* BPTnode<T>::split(T &key){
 	int mid = (degree - 1) / 2;
 	if (isleaf){
 		key = keys[mid + 1];
-		// ÓÒ°ë¿½±´ÖÁĞÂµÄ½Úµã 
+		// å³åŠæ‹·è´è‡³æ–°çš„èŠ‚ç‚¹ 
 		for (int i = mid + 1; i < degree; i++){
 			newnode->keys[i-mid-i] = keys[i];
 			keys.pop_back();
@@ -203,7 +203,7 @@ BPTnode<T>* BPTnode<T>::NextLeaf(){
 	return nextleaf;
 }
 
-//¶¨Òåclass bplustree 
+//å®šä¹‰class bplustree 
 template <typename T>
 class BPT{
 	private:
@@ -214,24 +214,24 @@ class BPT{
 		int key_num;
 		int node_num;
 		int keysize;
-		Tree root; // ¸ù½ÚµãÖ¸Õë
-		Tree leafhead; // Ò¶½Úµã×ó²¿Í·Ö¸Õë
-		struct searchkeyvar{ // ´æ´¢Ñ°ÕÒµÄkeyÖµ 
-			Tree keyptr; // ¶ÔÓ¦keyµÄÖ¸Õë
-			unsigned int index; // keyµÄindex
-			bool iffind; //ÊÇ·ñÕÒµ½ 
+		Tree root; // æ ¹èŠ‚ç‚¹æŒ‡é’ˆ
+		Tree leafhead; // å¶èŠ‚ç‚¹å·¦éƒ¨å¤´æŒ‡é’ˆ
+		struct searchkeyvar{ // å­˜å‚¨å¯»æ‰¾çš„keyå€¼ 
+			Tree keyptr; // å¯¹åº”keyçš„æŒ‡é’ˆ
+			unsigned int index; // keyçš„index
+			bool iffind; //æ˜¯å¦æ‰¾åˆ° 
 		};
 		
-		void initbpt(); // ¶Ôbpt³õÊ¼»¯
-		void search_key(Tree keyptr, T key); // Ñ°ÕÒĞèÒªµÄkeyÖµµÄ½Úµã
-		bool insertchangeturn(searchkeyvar &var); // ²åÈëºóÂú½Úµã¸Ä±äÊ÷
-		bool deletechangeturn(searchkeyvar &var); // É¾³ıºó¿Õ½Úµã¸Ä±äÊ÷ 
+		void initbpt(); // å¯¹bptåˆå§‹åŒ–
+		void search_key(Tree keyptr, T key); // å¯»æ‰¾éœ€è¦çš„keyå€¼çš„èŠ‚ç‚¹
+		bool insertchangeturn(searchkeyvar &var); // æ’å…¥åæ»¡èŠ‚ç‚¹æ”¹å˜æ ‘
+		bool deletechangeturn(searchkeyvar &var); // åˆ é™¤åç©ºèŠ‚ç‚¹æ”¹å˜æ ‘ 
 	public:
 		BPT(); 
 		~BPT();
-		bool add_key(T &key); // ²åÈëÒ»¸ökeyÖµºó·µ»ØÊÇ·ñ³É¹¦
-		bool delete_key(T &key); // É¾³ıÒ»¸ökeyÖµºó·µ»ØÊÇ·ñ³É¹¦
-		void drop_tree(Tree node); // É¾³ıÕû¿ÃÊ÷²¢·µ»ØÊÇ·ñ³É¹¦ 
+		bool add_key(T &key); // æ’å…¥ä¸€ä¸ªkeyå€¼åè¿”å›æ˜¯å¦æˆåŠŸ
+		bool delete_key(T &key); // åˆ é™¤ä¸€ä¸ªkeyå€¼åè¿”å›æ˜¯å¦æˆåŠŸ
+		void drop_tree(Tree node); // åˆ é™¤æ•´æ£µæ ‘å¹¶è¿”å›æ˜¯å¦æˆåŠŸ 
 		
 };
 
@@ -247,9 +247,9 @@ void BPT<T>::initbpt(){
 template <class T>
 void BPT<T>::search_key(Tree keyptr, T key, searchkeyvar &var){
 	unsigned int index = 0;
-	// ÔÚ½ÚµãÄÚÕÒµ½keyÖµ 
+	// åœ¨èŠ‚ç‚¹å†…æ‰¾åˆ°keyå€¼ 
 	if (keyptr->search(key, index)){
-		//Ò¶½Úµã 
+		//å¶èŠ‚ç‚¹ 
 		if (keyptr->isleaf){
 			var.index = index;
 			var.keyptr = keyptr;
@@ -266,7 +266,7 @@ void BPT<T>::search_key(Tree keyptr, T key, searchkeyvar &var){
 			var.iffind = true;
 		}
 	}
-	// Î´ÕÒµ½ 
+	// æœªæ‰¾åˆ° 
 	else {
 		if (keyptr->isleaf){
 			var.keyptr = keyptr;
@@ -282,20 +282,20 @@ void BPT<T>::search_key(Tree keyptr, T key, searchkeyvar &var){
 
 template <class T>
 bool BPT<T>::add_key(T &key){
-	// ³õÊ¼»¯Ê÷ 
+	// åˆå§‹åŒ–æ ‘ 
 	if (root == NULL) initbpt();
 	
 	searchkeyvar var;
-	// ÅĞ¶Ï¸ÃkeyÊÇ·ñÒÑ´æÔÚ 
+	// åˆ¤æ–­è¯¥keyæ˜¯å¦å·²å­˜åœ¨ 
 	search_key(root, key, var);
 	if (var.iffind){
-		// ÒÑ´æÔÚ 
+		// å·²å­˜åœ¨ 
 		return false;
 	}
 	else {
-		// ²åÈë²Ù×÷
+		// æ’å…¥æ“ä½œ
 		var.keyptr->addkey(key);
-		// ½ÚµãÒÑÂú 
+		// èŠ‚ç‚¹å·²æ»¡ 
 		if (var.keyptr->keynum == degree){
 			insertchangeturn(var);
 		}
@@ -310,7 +310,7 @@ template <class T>
 bool BPT<T>::insertchangeturn(searchkeyvar &var){
 		Tree newnode = var.keyptr->split(key);
 		node_num++;
-			// ¸ù½Úµã 
+			// æ ¹èŠ‚ç‚¹ 
 		if (var.keyptr->isroot()){
 			Tree root = new BPTnode<T>(degree, false);
 			level++;
@@ -322,7 +322,7 @@ bool BPT<T>::insertchangeturn(searchkeyvar &var){
 			root->childs[1] = newnode;
 			return true;
 		}
-		// ·Ç¸ù½Úµã
+		// éæ ¹èŠ‚ç‚¹
 		else {
 			Tree parent = var.keyptr->parent;
 			unsigned int index = parent->addkey(key);
@@ -340,20 +340,20 @@ bool BPT<T>::insertchangeturn(searchkeyvar &var){
 template <class T>
 bool BPT<T>::delete_key(T &key){
 	searchkeyvar var;
-	search_key(root, key, var); // ÏÈÑ°ÕÒ¸ÃkeyÅĞ¶ÏÊÇ·ñ´æÔÚ
-	// ¸Ãkey²»´æÔÚ 
+	search_key(root, key, var); // å…ˆå¯»æ‰¾è¯¥keyåˆ¤æ–­æ˜¯å¦å­˜åœ¨
+	// è¯¥keyä¸å­˜åœ¨ 
 	if (var.iffind == false){
 		return false;
 	}
 	else {
-		// Îª¸ù½Úµã 
+		// ä¸ºæ ¹èŠ‚ç‚¹ 
 		if (var.keyptr->isroot()){
 			var.keyptr->deletekey(var.index);
 			key_num--;
 			return deletechangeturn(var);
 		}
 		else {
-			// keyÔÚÖ¦¸É½ÚµãÉÏ 
+			// keyåœ¨æå¹²èŠ‚ç‚¹ä¸Š 
 			if (var.index == 0 && leafhead != var.keyptr){
 				unsigned int index = 0;
 				Tree updateparent = var.keyptr->parent;
@@ -367,7 +367,7 @@ bool BPT<T>::delete_key(T &key){
 				var.keyptr->deletekey(var.index);
 				return deletechangeturn(var);				
 			}
-			// keyÔÚÒ¶½ÚµãÉÏ 
+			// keyåœ¨å¶èŠ‚ç‚¹ä¸Š 
 			else {
 				var.keyptr->deletekey(var.index);
 				key_num--;
@@ -382,7 +382,7 @@ bool BPT<T>::delete_key(T &key){
 template <class T>
 bool BPT<T>::deletechangeturn(searchkeyvar &var){
 	int mid = (degree - 1) / 2;
-	// ²»±ä»¯ 
+	// ä¸å˜åŒ– 
 	if (((var.keyptr->isleaf) && (var.keyptr->keynum >= mid)) || 
 		((var.keyptr->isleaf == false) && (degree != 3) && (var.keyptr->keynum >= mid-1)) || 
 		((degree == 3) && (var.keyptr->isleaf == false) && (var.keyptr->keynum < 0)) || 
@@ -390,11 +390,11 @@ bool BPT<T>::deletechangeturn(searchkeyvar &var){
 			return true;
 		}
 		
-	// ¸ù½Úµã 
+	// æ ¹èŠ‚ç‚¹ 
 	if ((var.keyptr->isroot())) {
 		if (var.keyptr->keynum == 0 ){
 			if (root->isleaf){
-				// ±ä³É¿ÕÊ÷ 
+				// å˜æˆç©ºæ ‘ 
 				delete var.keyptr;
 				root = NULL;
 				leafhead = NULL;
@@ -410,7 +410,7 @@ bool BPT<T>::deletechangeturn(searchkeyvar &var){
 			}
 		}
 	}
-	// ·Ç¸ù½Úµã 
+	// éæ ¹èŠ‚ç‚¹ 
 	else {
 		Tree parent = var.keyptr->parent;
 		Tree brother = NULL;
@@ -480,7 +480,7 @@ bool BPT<T>::deletechangeturn(searchkeyvar &var){
 				}
 			}
 		}
-		// Ö¦½Úµã 
+		// æèŠ‚ç‚¹ 
 		else {
 			unsigned int index = 0;
 			parent->searchkey(var.keyptr->childs[0]->keys[0], index);
